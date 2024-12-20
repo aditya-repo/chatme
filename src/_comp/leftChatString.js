@@ -7,7 +7,7 @@ const LeftChatString = () => {
 
       <span
         style={{
-          backgroundColor: 'green',
+          backgroundColor: '#141a1f',
           clipPath: 'polygon(0 0, 100% 0, 100% 100%)',
           height: 12,
           width: 12,
@@ -15,7 +15,7 @@ const LeftChatString = () => {
       ></span>
       <span
         style={{
-          background: 'green',
+          background: '#141a1f',
           padding: '8px 10px',
           maxWidth: '75%',
           borderRadius: 6,
@@ -43,7 +43,7 @@ const SimpleChatStringLeft = () => {
       ></span>
       <span
         style={{
-          background: 'green',
+          background: '#141a1f',
           padding: '8px 10px',
           maxWidth: '750px',
           borderRadius: 6,

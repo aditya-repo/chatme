@@ -7,7 +7,7 @@ const RightChatString = ()=>{
         
       <span
         style={{
-          background: 'green',
+          background: '#141a1f',
           padding: '8px 10px',
           maxWidth: '750px',
           borderRadius: 6,
@@ -20,7 +20,7 @@ const RightChatString = ()=>{
       </span>
       <span
         style={{
-          backgroundColor: 'green',
+          backgroundColor: '#141a1f',
           clipPath: 'polygon(0 0, 100% 0, 0 100%)', 
           height: 12, 
           width: 12, 
@@ -37,7 +37,7 @@ const SimpleChatString = ()=>{
           
         <span
           style={{
-            background: 'green',
+            background: '#141a1f',
             padding: '8px 10px',
             maxWidth: '750px',
             borderRadius: 6,
