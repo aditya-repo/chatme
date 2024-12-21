@@ -30,7 +30,7 @@ const RightChatString = ()=>{
   )
 }
 
-const SimpleChatString = ()=>{
+const SimpleChatString = ({message})=>{
     return(
 
         <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start' }}>
@@ -45,7 +45,7 @@ const SimpleChatString = ()=>{
             lineHeight: '1.5', 
           }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur gggggggggggggggggggggggdddddddddddddddddddddddddddddddddddddddddddddin pulvinar erat.
+          {message}
         </span>
         <span
           style={{

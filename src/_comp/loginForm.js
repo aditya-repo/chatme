@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Card, CardContent, Typography, TextField, Button, Link } from '@mui/material';
+import axios from 'axios';
+import URL from '../config/apiConstant';
 
-const LoginForm = () => {
+const LoginForm = ({setCurrentPage}) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  const handleLogin = async ()=>{
+    const payload = {email, password}
+    const response = await axios.post(URL.LOGIN(), payload)
+    const token = response.data.token
+    if (token) {
+      localStorage.setItem('authToken', token)
+    }else{
+      setError("Something went wrong")
+    }
+  }
+
   return (
     <Box
       display="flex"
@@ -20,7 +37,9 @@ const LoginForm = () => {
         <CardContent>
           <Typography variant="h5" textAlign="left" marginBottom={2}>
             Welcome Buddy!
+            {error}
           </Typography>
+          <Box component="form" onSubmit={handleLogin}>
           {/* Email Field */}
           <TextField
             fullWidth
@@ -28,6 +47,8 @@ const LoginForm = () => {
             type="email"
             variant="outlined"
             margin="normal"
+            value={email}
+            onChange={(e)=> setEmail(e.target.value)}
           />
           {/* Password Field */}
           <TextField
@@ -36,10 +57,12 @@ const LoginForm = () => {
             type="password"
             variant="outlined"
             margin="normal"
+            value={password}
+            onChange={(e)=> setPassword(e.target.value)}
           />
           {/* Forgot Password Link */}
           <Box display="flex" justifyContent="flex-end" marginBottom={2}>
-            <Link href="/forgot-password" underline="hover">
+            <Link underline="hover"   >
               Forgot Password?
             </Link>
           </Box>
@@ -56,9 +79,10 @@ const LoginForm = () => {
             <Typography variant="body2" marginRight={1}>
               Don't have an account?
             </Typography>
-            <Link href="/signup" underline="hover">
+            <Link  onClick={() => setCurrentPage('signup')} underline="hover">
               Sign Up
             </Link>
+          </Box>
           </Box>
         </CardContent>
       </Card>

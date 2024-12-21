@@ -1,11 +1,11 @@
-const axios = require("axios")
-const { default: URL } = require("./apiConstant")
+import axios from 'axios';
+import URL from './apiConstant'
 
-const api = axios.create({
+const axiosInstance = axios.create({
     baseURL: URL.ROOT()
 })
 
-api.interceptors.request.use((config)=>{
+axiosInstance.interceptors.request.use((config)=>{
     const token = localStorage.getItem('authToken')
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`
@@ -14,12 +14,13 @@ api.interceptors.request.use((config)=>{
 }, (error)=> {return Promise.reject(error)}
 )
 
-api.interceptors.request.use((response)=> response, (error)=> {
+axiosInstance.interceptors.request.use((response)=> response, (error)=> {
     if (error.response && error.response.status == 401) {
-        window.location.href = '/login'
+        console.log("wrapper message");
+        
     }
 
     return Promise.reject(error)
 })
 
-export default api
+export default axiosInstance

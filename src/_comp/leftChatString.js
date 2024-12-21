@@ -1,6 +1,8 @@
 import React from 'react'
 
-const LeftChatString = () => {
+const LeftChatString = ({message}) => {
+  console.log(message);
+  
   return (
 
     <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start' }}>
@@ -24,14 +26,16 @@ const LeftChatString = () => {
           lineHeight: '1.5',
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in pulvinar erat.
+        {message}
       </span>
     </div>
   )
 }
 
 
-const SimpleChatStringLeft = () => {
+const SimpleChatStringLeft = ({message}) => {
+  console.log(message);
+  
   return (
 
     <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start' }}>
@@ -51,7 +55,7 @@ const SimpleChatStringLeft = () => {
           lineHeight: '1.5',
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur gggggggggggggggggggggggdddddddddddddddddddddddddddddddddddddddddddddin pulvinar erat.
+        {message}
       </span>
     </div>
   )
