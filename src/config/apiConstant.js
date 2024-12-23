@@ -8,7 +8,8 @@ const URL = {
     CHATROOM: (id)=> `${BASE}/user/${id}`,
     PROFILE: ()=> `${BASE}/user/profile`,
     USER_PROFILE: (id)=> `${BASE}/user/profile/${id}`,
-    SEARCH_USER: (id)=> `${BASE}/user/search/${id}`
+    SEARCH_USER: (id)=> `${BASE}/user/search/${id}`,
+    PAIR_NEW_USER: ()=> `${BASE}/user/pairing`,
 }
 
 export default URL

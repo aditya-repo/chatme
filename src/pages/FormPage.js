@@ -1,15 +1,15 @@
 import { Box } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import LoginForm from '../_comp/loginForm'
 import SignupForm from '../_comp/signupForm'
 
-const LoginPage = ()=>{
+const LoginPage = ({error})=>{
     const [currentPage, setCurrentPage] = useState('home')
 
     const renderPage = ()=>{
         switch (currentPage) {
             case 'login':
-                return <LoginForm setCurrentPage={setCurrentPage} />
+                return <LoginForm error={error} setCurrentPage={setCurrentPage} />
             case 'signup':
                 return <SignupForm setCurrentPage={setCurrentPage} />
             default:

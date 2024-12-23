@@ -1,17 +1,42 @@
-import { Box, Typography, Stack } from '@mui/material'
-import React from 'react'
+import { Box, Typography, Stack, Button } from '@mui/material'
+import React, { useState } from 'react'
 
-const ContactList = ({dashboard}) => {
+const ContactList = ({dashboard, socket, sendParentData, sendUserData}) => {    
+
+    const [userid, setUserid] = useState(localStorage.getItem('userid'))
+    
     return (
         <Box width={480} >
             <Stack spacing={2}>
-                {dashboard.map((contact, index)=> <ContactCard key={index} contact={contact} />)}
+            {dashboard
+                .filter((contact) => contact._id !== userid)
+                .map((contact, index) => (
+                  <ContactCard key={index} contact={contact} socket={socket} sendParentData={sendParentData} sendUserData={sendUserData} />
+                ))}
             </Stack>
         </Box>
     )
 }
 
-const ContactCard = ({contact}) => {
+const ContactCard = ({contact, socket, sendParentData, sendUserData}) => {
+
+    const loadChatHistory = async (chatroomid)=>{
+        sendUserData(contact)
+        socket.emit('fetchHistory', {chatroomid})
+
+        socket.on('loadMessages', (message)=>{
+            sendParentData(message)
+        })
+    }
+
+    // console.log(contact);
+
+    const findchatid = (chatroom)=>{
+        const userid = localStorage.getItem('userid')
+        return chatroom[userid]
+    }
+    
+
     return (
         <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} gap={2} mt={'0 !important'} color={'#fff'} borderBottom={'1px solid grey'}>
             <Box display={'flex'} justifyContent={'flex-start'} alignItems={'center'} padding={2} marginTop={0}>
@@ -22,7 +47,9 @@ const ContactCard = ({contact}) => {
                 </div>
             </Box>
             <div>
-                <Typography paddingRight={2}>{5}</Typography>
+            <Button onClick={()=>loadChatHistory(findchatid(contact.chatrooms))}  sx={{
+                marginRight: 4
+            }} variant='contained' color='primary'>Message</Button> 
             </div>
         </Box>
     )

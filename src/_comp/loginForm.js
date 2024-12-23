@@ -1,24 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, TextField, Button, Link } from '@mui/material';
 import axios from 'axios';
 import URL from '../config/apiConstant';
 
-const LoginForm = ({setCurrentPage}) => {
+const LoginForm = ({setCurrentPage, error}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [errors, setErrors] = useState('')
 
-  const handleLogin = async ()=>{
+  const handleLogin = async (e)=>{
+    e.preventDefault()
+    console.log("hello");
+    
     const payload = {email, password}
     const response = await axios.post(URL.LOGIN(), payload)
     const token = response.data.token
+    const userid = response.data.userid
+    console.log(token);
+    
     if (token) {
       localStorage.setItem('authToken', token)
+      localStorage.setItem('userid', userid)
     }else{
-      setError("Something went wrong")
+      setErrors("Something went wrong")
     }
   }
 
+  useEffect(()=>{
+    const setError = ()=>{
+      setErrors(error)
+    }
+
+    setError()
+  }, [0])
+  
   return (
     <Box
       display="flex"
@@ -37,7 +52,7 @@ const LoginForm = ({setCurrentPage}) => {
         <CardContent>
           <Typography variant="h5" textAlign="left" marginBottom={2}>
             Welcome Buddy!
-            {error}
+            {errors}
           </Typography>
           <Box component="form" onSubmit={handleLogin}>
           {/* Email Field */}
@@ -71,6 +86,7 @@ const LoginForm = ({setCurrentPage}) => {
             variant="contained"
             fullWidth
             sx={{ bgcolor: '#1976d2', textTransform: 'none', marginBottom: 2 }}
+            type='submit'
           >
             Login
           </Button>

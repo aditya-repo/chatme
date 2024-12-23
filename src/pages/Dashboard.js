@@ -1,15 +1,14 @@
 import { Typography, Box } from '@mui/material';
 import ContactList from '../_comp/contactList';
-import { LeftChatString, SimpleChatStringLeft } from '../_comp/leftChatString';
-import { RightChatString, SimpleChatString } from '../_comp/rightChatString';
 import SendIcon from '@mui/icons-material/Send';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axiosInstance from '../config/axiosWrapper';
 import URL from '../config/apiConstant';
 import SearchedUser from '../_comp/searchedUser';
 
 
 import { io } from 'socket.io-client';
+import  ChatString  from '../_comp/chatString';
 
 const DashboardPage = ({ dashboard }) => {
 
@@ -25,24 +24,30 @@ const DashboardPage = ({ dashboard }) => {
     }
   }
 
-
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  console.log(messages);
-  
-  
+  const chatboxRef = useRef(null)
+
+  useEffect(()=>{
+    if (chatboxRef.current) {
+      chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight
+    }
+  }, [messages])
+
+  const [currentuser, setCurrentuser] = useState({})
 
   useEffect(() => {
     // Connect to the Socket.io server
-    const socketConnection = io(URL.ROOT()); // Replace with your server URL
+    const socketConnection = io(URL.ROOT()); 
     setSocket(socketConnection);
 
 
     // Listen for incoming messages from the server
     socketConnection.on('receiveMessage', (incomingMessage) => {
       setMessages((prevMessages) => [...prevMessages, incomingMessage]);
+      // setMessages(incomingMessage)
     });
 
     // Clean up when the component unmounts
@@ -52,14 +57,37 @@ const DashboardPage = ({ dashboard }) => {
   }, []);
 
 
+  const fetchIds = () =>{
+    const userid = localStorage.getItem('userid')
+    console.log(currentuser);
+    
+    const payload = {sender:userid, receipent: currentuser._id, chatroomid: currentuser.chatrooms[userid]}
+    return payload
+  }
+
+
   const sendMessage = () => {
+    // setToggle(!toggle)
+    let data = fetchIds()
+
+    data = {...data, message}
+
     if (socket && message.trim()) {
       // Emit the message to the server
-      socket.emit('sendMessage', message);
+      socket.emit('sendMessage', data);
       setMessage(''); // Clear the input after sending
     }
   };
 
+  const fetchChildMessage = (data) => {
+    setMessages(data.chatroom)
+
+  }
+
+  const updateData = (data)=>{
+    setCurrentuser(data)
+  }
+  
 
   return (
     <Box
@@ -103,7 +131,7 @@ const DashboardPage = ({ dashboard }) => {
           </Box>
 
           <Box flex={1} overflow="auto">
-            {(searched.length > 0) ? <SearchedUser users={searched} /> : <ContactList dashboard={dashboard} />}
+            {(searched.length > 0) ? <SearchedUser users={searched} dashboard={dashboard} /> : <ContactList dashboard={dashboard} socket={socket} sendParentData={fetchChildMessage} sendUserData={updateData}  />}
           </Box>
         </Box>
       </Box>
@@ -133,7 +161,9 @@ const DashboardPage = ({ dashboard }) => {
               borderRadius="50%"
               marginRight={1}
             />
-            <Typography fontSize={26}>Raju Bhaiya</Typography>
+            <Box>
+            <Typography fontSize={24}>{currentuser.name}</Typography>
+            </Box>
           </Box>
           <Box display="flex">
             <Box
@@ -152,18 +182,17 @@ const DashboardPage = ({ dashboard }) => {
           </Box>
         </Box>
 
-        {/* Scrollable Content */}
         <Box
           flex={1}
           overflow="auto"
           padding={2}
           bgcolor={'#27363f'}
+          ref={chatboxRef}
         >
-
-              {messages.map((message, index)=> <SimpleChatString message={message} key={index} />)}
-
-
-
+        {messages.map((message, index) => {
+          const previous = index > 0 ? messages[index - 1] : null;
+          return <ChatString message={message} key={index} previous={previous} />;
+      })}
         </Box>
 
         {/* Sticky Footer */}

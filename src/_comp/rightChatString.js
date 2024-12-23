@@ -1,9 +1,10 @@
 import React from 'react'
 
-const RightChatString = ()=>{
+const RightChatString = ({message})=>{
+ 
   return(
 
-      <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start' }}>
+      <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start', justifyContent: "right" }}>
         
       <span
         style={{
@@ -16,7 +17,7 @@ const RightChatString = ()=>{
           lineHeight: '1.5', 
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur gggggggggggggggggggggggdddddddddddddddddddddddddddddddddddddddddddddin pulvinar erat.
+        {message.message}
       </span>
       <span
         style={{
@@ -31,9 +32,10 @@ const RightChatString = ()=>{
 }
 
 const SimpleChatString = ({message})=>{
+  
     return(
 
-        <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start' }}>
+        <div style={{ marginBottom: 12, display: 'flex', alignItems: 'flex-start', justifyContent: "flex-end" }}>
           
         <span
           style={{
@@ -45,7 +47,7 @@ const SimpleChatString = ({message})=>{
             lineHeight: '1.5', 
           }}
         >
-          {message}
+          {message.message}
         </span>
         <span
           style={{

@@ -10,31 +10,41 @@ import axiosInstance from './config/axiosWrapper';
 
 function App() {
   const theme = createTheme();
-  const [isValid, setIsValid] = useState(null)
+  const [isValid, setIsValid] = useState(false)
   const [dashboard, setDashboard] = useState([])
+  const [error, setError] = useState('')
 
-  useEffect(()=>{
-    const setTokenValue = async ()=>{
+  useEffect(() => {
+    const setTokenValue = async () => {
       const token = localStorage.getItem('authToken')
-      console.log(token);
-      
+      const userid = localStorage.getItem('userid')
+
       if (!token) {
         return
       }
-      const response = await axiosInstance.post(URL.DASHBOARD())
-      setIsValid(true)
-      setDashboard(response.data.userarray)
+      
+      try {
+        console.log(URL.DASHBOARD());
+        
+        const response = await axiosInstance.post(URL.DASHBOARD(), {userid})
+        setIsValid(true)
+        setDashboard(response.data.userarray)     
+
+      } catch (error) {
+        setError(error.response.data.message)   
+       
+      }
     }
     setTokenValue()
   }, [])
 
-  
+
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="xxl" disableGutters>
-      {isValid ? <DashboardPage dashboard={dashboard} /> : <FormPage />}
+        {isValid ? <DashboardPage error={error} dashboard={dashboard} /> : <FormPage error={error} />}
       </Container>
     </ThemeProvider>
   );
