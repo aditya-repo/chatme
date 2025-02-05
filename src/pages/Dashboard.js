@@ -8,7 +8,7 @@ import SearchedUser from '../_comp/searchedUser';
 
 
 import { io } from 'socket.io-client';
-import  ChatString  from '../_comp/chatString';
+import ChatString from '../_comp/chatString';
 
 const DashboardPage = ({ dashboard }) => {
 
@@ -30,7 +30,7 @@ const DashboardPage = ({ dashboard }) => {
 
   const chatboxRef = useRef(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     if (chatboxRef.current) {
       chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight
     }
@@ -40,7 +40,7 @@ const DashboardPage = ({ dashboard }) => {
 
   useEffect(() => {
     // Connect to the Socket.io server
-    const socketConnection = io(URL.ROOT()); 
+    const socketConnection = io(URL.ROOT());
     setSocket(socketConnection);
 
 
@@ -57,11 +57,11 @@ const DashboardPage = ({ dashboard }) => {
   }, []);
 
 
-  const fetchIds = () =>{
+  const fetchIds = () => {
     const userid = localStorage.getItem('userid')
     console.log(currentuser);
-    
-    const payload = {sender:userid, receipent: currentuser._id, chatroomid: currentuser.chatrooms[userid]}
+
+    const payload = { sender: userid, receipent: currentuser._id, chatroomid: currentuser.chatrooms[userid] }
     return payload
   }
 
@@ -70,7 +70,7 @@ const DashboardPage = ({ dashboard }) => {
     // setToggle(!toggle)
     let data = fetchIds()
 
-    data = {...data, message}
+    data = { ...data, message }
 
     if (socket && message.trim()) {
       // Emit the message to the server
@@ -84,10 +84,10 @@ const DashboardPage = ({ dashboard }) => {
 
   }
 
-  const updateData = (data)=>{
+  const updateData = (data) => {
     setCurrentuser(data)
   }
-  
+
 
   return (
     <Box
@@ -95,7 +95,7 @@ const DashboardPage = ({ dashboard }) => {
       height="100vh"
       overflow="hidden"
     >
-      <Box maxWidth={480} width={'100%'}
+      <Box maxWidth={400} width={'100%'}
         component='form'>
         <Box flex={1} bgcolor={'#111B21'} display="flex" flexDirection="column" color={'#fff'} height="100%">
           <Box padding={1.2} display={'flex'} justifyContent={'space-between'}>
@@ -131,8 +131,9 @@ const DashboardPage = ({ dashboard }) => {
           </Box>
 
           <Box flex={1} overflow="auto">
-            {(searched.length > 0) ? <SearchedUser users={searched} dashboard={dashboard} /> : <ContactList dashboard={dashboard} socket={socket} sendParentData={fetchChildMessage} sendUserData={updateData}  />}
+            {(searched.length > 0) ? <SearchedUser users={searched} dashboard={dashboard} /> : <ContactList dashboard={dashboard} socket={socket} sendParentData={fetchChildMessage} sendUserData={updateData} />}
           </Box>
+
         </Box>
       </Box>
       <Box
@@ -162,7 +163,7 @@ const DashboardPage = ({ dashboard }) => {
               marginRight={1}
             />
             <Box>
-            <Typography fontSize={24}>{currentuser.name}</Typography>
+              <Typography fontSize={24}>{currentuser.name}</Typography>
             </Box>
           </Box>
           <Box display="flex">
@@ -189,10 +190,10 @@ const DashboardPage = ({ dashboard }) => {
           bgcolor={'#27363f'}
           ref={chatboxRef}
         >
-        {messages.map((message, index) => {
-          const previous = index > 0 ? messages[index - 1] : null;
-          return <ChatString message={message} key={index} previous={previous} />;
-      })}
+          {messages.map((message, index) => {
+            const previous = index > 0 ? messages[index - 1] : null;
+            return <ChatString message={message} key={index} previous={previous} />;
+          })}
         </Box>
 
         {/* Sticky Footer */}
@@ -243,6 +244,7 @@ const DashboardPage = ({ dashboard }) => {
           </Box>
         </Box>
       </Box>
+      
     </Box>
   )
 }

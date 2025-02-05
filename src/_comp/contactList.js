@@ -6,7 +6,7 @@ const ContactList = ({dashboard, socket, sendParentData, sendUserData}) => {
     const [userid, setUserid] = useState(localStorage.getItem('userid'))
     
     return (
-        <Box width={480} >
+        <Box width={400} >
             <Stack spacing={2}>
             {dashboard
                 .filter((contact) => contact._id !== userid)

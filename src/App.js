@@ -32,13 +32,11 @@ function App() {
 
       } catch (error) {
         setError(error.response.data.message)   
-       
+
       }
     }
     setTokenValue()
   }, [])
-
-
 
   return (
     <ThemeProvider theme={theme}>
